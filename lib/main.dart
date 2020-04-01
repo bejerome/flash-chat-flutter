@@ -5,11 +5,6 @@ import 'package:flash_chat/screens/registration_screen.dart';
 import 'package:flash_chat/screens/chat_screen.dart';
 import 'package:flash_chat/screens/custom_login.dart';
 
-// import 'screens/chat_screen.dart';
-// import 'screens/login_screen.dart';
-// import 'screens/registration_screen.dart';
-// import 'screens/welcome_screen.dart';
-
 void main() => runApp(FlashChat());
 
 class FlashChat extends StatelessWidget {
@@ -17,6 +12,7 @@ class FlashChat extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       initialRoute: CustomeLoginScreen.id,
+      debugShowCheckedModeBanner: false,
       routes: {
         CustomeLoginScreen.id: (context) => CustomeLoginScreen(),
         RegistrationScreen.id: (context) => RegistrationScreen(),

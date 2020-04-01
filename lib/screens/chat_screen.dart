@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flash_chat/components/bubble_message.dart';
 
+
 final bool isMe = false;
 
 class ChatScreen extends StatefulWidget {
@@ -68,7 +69,7 @@ class _ChatScreenState extends State<ChatScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             StreamBuilder<QuerySnapshot>(
-              stream: _firestore.collection('messages').snapshots(),
+              stream: (_firestore.collection('messages').orderBy('sequence')).snapshots(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
                   return Center(
@@ -82,14 +83,19 @@ class _ChatScreenState extends State<ChatScreen> {
                 for (var message in messages) {
                   final messageText = message.data['text'];
                   final messageSender = message.data['sender'];
+                  print(message.data['text']);
+                  if (message.data['text'] != null){
                   final messageWidget = MessageBubbles(
-                      sender: messageSender,
-                      message: messageText,
-                      isMe: loggedInUser.email == messageSender);
+                    sender: messageSender,
+                    message: messageText,
+                    isMe: loggedInUser.email == messageSender,
+                  );
                   messageWidgets.add(messageWidget);
+                }
                 }
                 return Expanded(
                     child: ListView(
+                  
                   padding:
                       EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
                   children: messageWidgets,
@@ -116,6 +122,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       _firestore.collection('messages').add({
                         'text': messageText,
                         'sender': loggedInUser.email,
+                        'sequence': Timestamp.now(),
                       });
                       FocusScope.of(context).requestFocus(new FocusNode());
                     },
